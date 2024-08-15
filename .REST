@@ -1,0 +1,38 @@
+### Agregar Medico
+POST http://localhost:3000/Medico HTTP/1.1
+Content-Type: application/json
+
+{
+    "DNI": "",
+    "nombre": "",
+    "apellido": "",
+    "mail": "",
+    "contraseña": "",
+    "matricula": "",
+    "hospital": ""
+}
+
+### Mostrar perfil de un Medico
+GET http://localhost:3000/Medico/ HTTP/1.1
+
+### Eliminar un Medico
+
+DELETE http://localhost:3000/Medico/ HTTP/1.1
+
+### Agregar Paciente
+POST http://localhost:3000/Paciente HTTP/1.1
+Content-Type: application/json
+
+{
+    "DNI": "",
+    "nombre": "",
+    "apellido": "",
+    "mail": "",
+    "FechaNacimiento": ""
+}
+
+## Mostrar perfil de un Paciente
+GET http://localhost:3000/Paciente/2 HTTP/1.1
+### Eliminar un Paciente
+
+DELETE http://localhost:3000/Paciente/3 HTTP/1.1
