@@ -1,42 +1,60 @@
 import { client } from "../db.js";
 
-//agregar un nuevo paciente
+import pacienteService from '../services/pacienteService.js';
+
+// Agregar un nuevo paciente
 const createPaciente = async (req, res) => {
-    const { DNI, nombre, apellido,mail, FechaNacimiento } = req.body;
-
-        const result = await client.query(
-            `INSERT INTO public."Paciente" ("DNI-Paciente", "Nombre", "Apellido","Mail", "Fecha Nacimiento" ) 
-             VALUES ($1, $2, $3, $4, $5) 
-             RETURNING *`, 
-             [DNI, nombre, apellido,mail, FechaNacimiento ]
-        );
-
-        res.json("se creo correctamente el paciente");
-} ;
+    const { DNI, nombre, apellido, mail, FechaNacimiento } = req.body;
+    try {
+        const paciente = await pacienteService.createPaciente(DNI, nombre, apellido, mail, FechaNacimiento);
+        res.status(201).json(paciente);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al agregar el paciente' });
+    }
+};
 
 // Ver perfil de un paciente
 const verPerfilPaciente = async (req, res) => {
     const { DNI } = req.params;
-    const result = await client.query('SELECT * FROM public."Paciente" WHERE "DNI-Paciente" = $1', [DNI]);
-        res.json(result)
+    try {
+        const paciente = await pacienteService.verPerfilPaciente(DNI);
+        if (paciente) {
+            res.json(paciente);
+        } else {
+            res.status(404).json({ error: 'Paciente no encontrado' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener el perfil del paciente' });
+    }
 };
-//Eliminar perfil  de un  medico
-const deletePaciente = async (req, res) => {
-    const DNI = req.params;
-    const result = await client.query(
-        'DELETE FROM public."Paciente" WHERE "DNI-Paciente" = $1',
-        [DNI]
-    
-    )
-    res.json({ message: 'Paciente eliminado corrrectamente' });
 
+// Ver todos los pacientes
+const verPacientes = async (req, res) => {
+    try {
+        const pacientes = await pacienteService.verPacientes();
+        res.json(pacientes);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los pacientes' });
+    }
+};
+
+// Eliminar perfil de un paciente
+const deletePaciente = async (req, res) => {
+    const { DNI } = req.params;
+    try {
+        const result = await pacienteService.deletePaciente(DNI);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al eliminar el paciente' });
+    }
 };
 
 const pacientes = {
         
     createPaciente,
     verPerfilPaciente,
-    deletePaciente
+    deletePaciente,
+    verPacientes,
   
  };
  export default pacientes;

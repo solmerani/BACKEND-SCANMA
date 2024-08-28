@@ -3,17 +3,23 @@ POST http://localhost:3000/Medico HTTP/1.1
 Content-Type: application/json
 
 {
-    "DNI": "",
-    "nombre": "",
-    "apellido": "",
-    "mail": "",
-    "contraseña": "",
-    "matricula": "",
-    "hospital": ""
+    "DNI": "48464024",
+    "nombre": "jazmin",
+    "apellido": "safdieh",
+    "mail": "sol123@gmail.com",
+    "contraseña": "jachu324",
+    "matricula": "678345672",
+    "hospital": "bazterrica"
 }
 
 ### Mostrar perfil de un Medico
+GET http://localhost:3000/Medico/48116000 HTTP/1.1
+
+### Mostrar todos los Medicoa
 GET http://localhost:3000/Medico/ HTTP/1.1
+
+### cambiar contraseña
+PUT http://localhost:3000/Medico/ HTTP/1.1
 
 ### Eliminar un Medico
 
@@ -33,6 +39,12 @@ Content-Type: application/json
 
 ## Mostrar perfil de un Paciente
 GET http://localhost:3000/Paciente/2 HTTP/1.1
+### Mostrar todos los pacientes
+GET http://localhost:3000/Paciente/ HTTP/1.1
+
 ### Eliminar un Paciente
 
 DELETE http://localhost:3000/Paciente/3 HTTP/1.1
+
+### agregar imagen
+PUT http://localhost:3000/images/upload
