@@ -1,32 +1,32 @@
 ### Agregar Medico
-POST http://localhost:3000/Medico HTTP/1.1
+POST http://localhost:3000/api/medicos/Medico HTTP/1.1
 Content-Type: application/json
 
 {
-    "DNI": "48464024",
-    "nombre": "jazmin",
-    "apellido": "safdieh",
+    "DNI": "48484024",
+    "Nombre": "jazmin",
+    "Apellido": "safdieh",
     "mail": "sol123@gmail.com",
     "contraseña": "jachu324",
-    "matricula": "678345672",
-    "hospital": "bazterrica"
+    "matricula": "67834567",
+    "Hospital": "bazterrica"
 }
 
 ### Mostrar perfil de un Medico
-GET http://localhost:3000/Medico/48116000 HTTP/1.1
+GET http://localhost:3000/api/medicos/Medico/1 HTTP/1.1
 
 ### Mostrar todos los Medicoa
-GET http://localhost:3000/Medico/ HTTP/1.1
+GET http://localhost:3000/api/medicos/Medico/ HTTP/1.1
 
 ### cambiar contraseña
-PUT http://localhost:3000/Medico/ HTTP/1.1
+PUT http://localhost:3000/api/medicos/Medico/ HTTP/1.1
 
 ### Eliminar un Medico
 
-DELETE http://localhost:3000/Medico/ HTTP/1.1
+DELETE http://localhost:3000/api/medicos/Medico/ HTTP/1.1
 
 ### Agregar Paciente
-POST http://localhost:3000/Paciente HTTP/1.1
+POST http://localhost:3000/api/pacientes/Paciente HTTP/1.1
 Content-Type: application/json
 
 {
@@ -38,13 +38,13 @@ Content-Type: application/json
 }
 
 ## Mostrar perfil de un Paciente
-GET http://localhost:3000/Paciente/2 HTTP/1.1
+GET http://localhost:3000/api/pacientes/Paciente/2 HTTP/1.1
 ### Mostrar todos los pacientes
-GET http://localhost:3000/Paciente/ HTTP/1.1
+GET http://localhost:3000/api/pacientes/Paciente/ HTTP/1.1
 
 ### Eliminar un Paciente
 
-DELETE http://localhost:3000/Paciente/3 HTTP/1.1
+DELETE http://localhost:3000/api/pacientes/Paciente/3 HTTP/1.1
 
 ### agregar imagen
 PUT http://localhost:3000/images/upload

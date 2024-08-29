@@ -15,6 +15,9 @@ app.use(express.json());       // Parseo de JSON
 app.use('/api/medicos', router); 
 app.use('/api/pacientes', rutaspaciente); 
 
+app.post('/login', (req,res) --> {})
+app.post('/register', (req,res) --> {})
+app.post('/logout', (req,res) --> {})
 
 
 // Asociamos la ruta "/" a la función pasada como segundo parámetro

@@ -5,6 +5,34 @@ import pacienteService from '../services/pacienteService.js';
 // Agregar un nuevo paciente
 const createPaciente = async (req, res) => {
     const { DNI, nombre, apellido, mail, FechaNacimiento } = req.body;
+    // Validación del DNI
+    if (typeof DNI != 'string') throw new Error('DNI must be a string');
+    if (DNI.length != 8) throw new Error('DNI debe contener 8 caracteres');
+
+
+    // Validacion de que todos los campos son obligatorios
+    if (!DNI || !nombre || !apellido || !mail || !FechaNacimiento ) 
+        throw new Error('Todos los campos son obligatorios');
+
+    // Validacion nombre y apellido 
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!nameRegex.test(nombre)) throw new Error('Nombre debe contener solo letras');
+    if (!nameRegex.test(apellido)) throw new Error('Apellido debe contener solo letras');
+    if (nombre.length > 50) throw new Error('Nombre no puede tener más de 50 caracteres');
+    if (apellido.length > 50) throw new Error('Apellido no puede tener más de 50 caracteres');
+
+    // Validación del mail
+    if (typeof mail != 'string') throw new Error('mail must be a string');
+    if (mail.length < 3) throw new Error('mail debe tener más de tres caracteres');
+    if (!mail.includes('@')) throw new Error('mail debe contener un @');
+    if (mail.length > 100) throw new Error('mail no puede tener más de 100 caracteres');
+    
+
+    // Asegurarse de que el mail no esté en uso ya para la creación de usuario
+    const user = await User.findOne({ mail });
+    if (user) throw new Error('este mail ya está en uso');
+    
+
     try {
         const paciente = await pacienteService.createPaciente(DNI, nombre, apellido, mail, FechaNacimiento);
         res.status(201).json(paciente);
