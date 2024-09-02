@@ -11,6 +11,14 @@ const createMedico = async (DNI, nombre, apellido, mail, contraseña, matricula,
     return result.rows[0];
 };
 
+//login del usuario
+const loginMedico = async (mail, contraseña) => {
+    const result = await client.query(
+        'SELECT * FROM public."Medico" WHERE mail = $1', [mail]
+    );
+    return result.rows[0];
+};
+
 // Ver perfil de un médico
 const verPerfilMedico = async (DNI) => {
     const medico = await client.query('SELECT * FROM public."Medico" WHERE "DNI" = $1', [DNI]);

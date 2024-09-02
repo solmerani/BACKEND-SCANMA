@@ -9,5 +9,7 @@ router.get("/Medico/:id", medicos.verPerfilMedico);
 router.get("/Medico", medicos.verMedicos);
 router.put("/Medico/:id", medicos.updateMedico);
 router.delete("/Medico/:id", medicos.deleteMedico);
+router.post('/Medico', medicos.loginMedico);
+
 
 export default router;
