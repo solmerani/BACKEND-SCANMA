@@ -2,7 +2,7 @@
 
 import router from './rutas/rutasmedico.js';
 import routerP from './rutas/rutaspaciente.js';
-import rutasanalisis from './rutas/rutasanalisis.js';
+import routerA from './rutas/rutasanalisis.js';
 import express from "express";
 
 // Creamos el servidor de Express con la configuración estándar básica
@@ -14,6 +14,7 @@ app.use(express.json());       // Parseo de JSON
 //rutas
 app.use('/api/medicos', router); 
 app.use('/api/pacientes', routerP); 
+app.use('/api/analisis', routerA);
 
 
 // Asociamos la ruta "/" a la función pasada como segundo parámetro

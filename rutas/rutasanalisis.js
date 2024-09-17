@@ -1,15 +1,13 @@
 
 import express from 'express';
-
-import  multer from 'multer';
-const router = express.Router();
-
-// Configura Multer para almacenar archivos en memoria
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-// Ruta para subir la imagen
+import Analisis  from '../Controllers/Analisis.js';
 
 
+const routerA = express.Router();
+const upload = Analisis.upload;
 
-export default router;
+// Ruta para subir análisis
+routerA.post('/upload', upload.single('image'), Analisis.uploadImageToCloudinary, Analisis.saveImageUrlToDB);
+
+
+export default routerA;
