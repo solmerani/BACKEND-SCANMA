@@ -1,6 +1,6 @@
+import cloudinary from "../middleweras/upload.js";
 import { client } from "../db.js";
 import analisisService from "../services/analisisService.js";
-import cloudinary from '../../upload.js';
 
 //extensiones de archivos
 
