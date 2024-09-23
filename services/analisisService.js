@@ -1,33 +1,10 @@
 import {client} from  '../db.js';
 
-import {v2 as cloudinary} from 'cloudinary';
-dotenv.config();
-
-//configuracion de cloudinary
-cloudinary.config ({
-    cloud_name:process.env.APP_CLOUDINARY_CLOUD_NAME ,
-    api_key: process.env.APP_CLOUDINARY_API_KEY,
-    api_secret: process.env.APP_CLOUDINARY_SECRET_KEY,
-});
-
-const uploadToCloudinary = async (imagePath) => {
-    try {
-        const result = await cloudinary.uploader.upload(imagePath, {
-            resource_type: 'auto',
-            folder: 'mamografias' // Puedes ajustar la carpeta si es necesario
-        });
-        return result.secure_url;
-    } catch (error) {
-        console.error('Error uploading to Cloudinary:', error);
-        throw error;
-    }
-};
-
-const SaveUrlDB = async (url, analysisId) => {
+const SaveAnalisis = async (image, fecha, paciente, medico) => {
     try {
         await client.query(
-            'UPDATE public."Analisis" SET "imagen" = $1 WHERE "id" = $2',
-            [url, analysisId]
+            'INSERT INTO public.Analisis (Imagen, Fecha, Paciente, Medico) VALUES ($1, $2, $3, $4)',
+            [image, fecha, paciente, medico],
         );
     } catch (error) {
         console.error('Error saving URL to database:', error);
@@ -36,8 +13,8 @@ const SaveUrlDB = async (url, analysisId) => {
 };
 
 const serviceAnalisis = {
-SaveUrlDB,
-uploadToCloudinary
+SaveAnalisis,
+
 }
 
 export default serviceAnalisis;
