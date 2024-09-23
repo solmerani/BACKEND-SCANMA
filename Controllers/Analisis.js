@@ -2,15 +2,18 @@ import { client } from "../db.js";
 import analisisService from "../services/analisisService.js";
 import cloudinary from '../../upload.js';
 
+//extensiones de archivos
 
-const imageFile = req.file.path;
-const extension = imageFile.split('.').pop();
-const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
+    const imageFile = req.file.path;
+    const extension = imageFile.split('.').pop();
+    const extensionesPermitidas = ['pdf', 'png', 'jpeg', 'jpg'];
+    
+    if (!extensionesPermitidas.includes(extension)) {
+        console.error('Extensión de archivo no permitida');
+        return res.status(400).send('Error: Extensión de archivo no permitida. Extensiones admitidas: PDF, PNG, JPEG, y JPG');
+    }
 
-if (!extensionesPermitidas.includes(extension)) {
-    console.error('Extensión de archivo no permitida');
-    return res.status(400).send('Error: Extensión de archivo no permitida. Extensiones admitidas: PDF, PNG, JPEG, y JPG');
-}
+
 
 //subir imagenes a cloudinary
 
