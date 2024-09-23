@@ -1,10 +1,11 @@
 
 import express from 'express';
 import Analisis  from '../Controllers/Analisis.js';
+import upload from '../middleweras/multer.js';
 const routerA = express.Router();
-const upload = Analisis.upload;
+
 
 // Ruta para subir análisis
-routerA.post('/upload', upload.single('image'), Analisis.UploadImage);
+routerA.post('/upload', upload.single('image'), Analisis.SaveAnalisis);
 
 export default routerA;
