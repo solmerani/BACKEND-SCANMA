@@ -66,4 +66,11 @@ GET http://localhost:3000/api/pacientes/48116000 HTTP/1.1
 DELETE http://localhost:3000/api/pacientes/23157892 HTTP/1.1
 
 
+### Agregar un analisis
 
+POST http://localhost:3000/api/analisis/upload HTTP/1.1
+
+Content-Type:form-multipart/form-data
+{
+    
+}
