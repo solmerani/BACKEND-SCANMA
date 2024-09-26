@@ -4,9 +4,14 @@ import router from './rutas/rutasmedico.js';
 import routerP from './rutas/rutaspaciente.js';
 import routerA from './rutas/rutasanalisis.js';
 import express from "express";
+import cors from "cors";
 
 // Creamos el servidor de Express con la configuración estándar básica
 const app = express();
+
+app.use(cors({
+    origin: 'http://127.0.0.1:5500'
+}));
 
 //middlewar
 
@@ -28,8 +33,6 @@ app.get("/", (req, res) => {
 app.listen(3000, () => {
     console.log("Example app listening on port 3000!");
 });
-
-
 
 
 

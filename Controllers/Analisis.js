@@ -1,6 +1,7 @@
 import cloudinary from "../middleweras/upload.js";
 import { client } from "../db.js";
 import analisisService from "../services/analisisService.js";
+import upload from '../middleweras/multer.js';
 
 //extensiones de archivos
 
@@ -45,12 +46,23 @@ const manejarSubidaArchivo = (req, res) => {
 };
 
 
+const getAnalisisbyID = async (req,res) => {
+    try{
+ const id = req.params.id;
+ const analisis = await analisisService.getAnalisisbyID(id);
+ if (analisis){
+    
+ }
+    }catch(error){
 
+    }
+}
 
 
 const Analisis = {
     manejarSubidaArchivo,
-    SaveAnalisis
+    SaveAnalisis,
+    getAnalisisbyID,
    
 }
 
