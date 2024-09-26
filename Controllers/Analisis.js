@@ -50,10 +50,13 @@ const getAnalisisbyID = async (req,res) => {
     try{
  const id = req.params.id;
  const analisis = await analisisService.getAnalisisbyID(id);
- if (analisis){
-    
- }
-    }catch(error){
+ if (analisis) {
+    res.json(medico);
+} else {
+    res.status(404).json({ error: 'Médico no encontrado' });
+}
+
+ }catch(error){
 
     }
 }

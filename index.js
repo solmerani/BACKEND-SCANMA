@@ -8,11 +8,12 @@ import cors from "cors";
 
 // Creamos el servidor de Express con la configuración estándar básica
 const app = express();
-
-app.use(cors({
-    origin: 'http://127.0.0.1:5500'
-}));
-
+const corsOptions = {
+    origin: 'http://127.0.0.1:5500',//(https://your-client-app.com)
+    optionsSuccessStatus: 200,
+  };
+ 
+  app.use(cors(corsOptions));
 //middlewar
 
 app.use(express.json());       // Parseo de JSON
