@@ -28,17 +28,7 @@ const loginMedico = async (mail, contraseña) => {
     );
     const medico = result.rows[0];
 
-    if (medico) {
-        // Comprobar si la contraseña es válida
-        const isValid = bcrypt.compareSync(contraseña, medico.contraseña);
-        if (isValid) {
-            return medico;
-        } else {
-            throw new Error('Contraseña incorrecta');
-        }
-    } else {
-        throw new Error('Usuario no existe');
-    }
+
 };
 
 

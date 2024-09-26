@@ -50,20 +50,19 @@ const createMedico = async (req, res) => {
 const loginMedico = async (req, res) => {
     const { mail, contraseña } = req.body;
     validaciones.mail(mail);
-    validaciones.contraseña(contraseña);
 
    // Consulta al servicio para obtener al médico basado en el correo
    const medico = await medicoService.loginMedico(mail, contraseña);
 
    // Si no se encuentra un médico con ese correo, se retorna un error
    if (!medico) {
-       return res.status(404).json({ error: 'Usuario no existe' });
+    return res.status(400).json({error:"usuario no existe"})
    }
 
    // Comparación de la contraseña proporcionada con la almacenada
    const isValid = await bcrypt.compare(contraseña, medico.contraseña);
         if (!isValid) {
-            return res.status(401).json({ error: 'Contraseña incorrecta' });
+            return res.status(400).json({error:"contraseña incorrecta"})
         }
 
    // Si todo es correcto, se retorna el objeto del médico

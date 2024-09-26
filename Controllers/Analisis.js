@@ -46,18 +46,27 @@ const manejarSubidaArchivo = (req, res) => {
 };
 
 
-const getAnalisisbyID = async (req,res) => {
+const getAnalisisbyPaciente = async (req,res) => {
     try{
- const id = req.params.id;
- const analisis = await analisisService.getAnalisisbyID(id);
+ const {DNI} = req.params;
+ const analisis = await analisisService.getAnalisisbyPaciente(DNI);
  if (analisis) {
-    res.json(medico);
+    res.json(analisis);
 } else {
-    res.status(404).json({ error: 'Médico no encontrado' });
+    res.status(404).json({ error: 'Analisis no encontrado' });
 }
 
  }catch(error){
+    res.status(500).json({ error: 'Error al obtener los analisis del paciente' });
+    }
+};
 
+const updateResult = async (req,res) => {
+    try{
+    const {resultado} = req.params;
+    const result = await analisisService.updateResult(resultado);
+    }catch(error){
+        res.status(500).json({ error: 'Error al cargar el resultado' });
     }
 }
 
@@ -65,7 +74,8 @@ const getAnalisisbyID = async (req,res) => {
 const Analisis = {
     manejarSubidaArchivo,
     SaveAnalisis,
-    getAnalisisbyID,
+    getAnalisisbyPaciente,
+    updateResult
    
 }
 

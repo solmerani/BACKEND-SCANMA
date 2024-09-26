@@ -9,7 +9,7 @@ routerP.get("/:DNI", pacientes.verPerfilPaciente);
 //Ver todos los pacientes
 routerP.get("/", pacientes.verPacientes);
 //Ver todos los pacientes de un medico
-routerP.get("/:DNIMedico", pacientes.verPacientesMedico);
+routerP.get("/pacientesMedico/:DNIMedico", pacientes.verPacientesMedico);
 //Eliminar un usuario de Paciente 
 routerP.delete("/:DNI", pacientes.deletePaciente);
 
