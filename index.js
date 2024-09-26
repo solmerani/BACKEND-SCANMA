@@ -9,7 +9,7 @@ import cors from "cors";
 // Creamos el servidor de Express con la configuración estándar básica
 const app = express();
 const corsOptions = {
-    origin: 'http://127.0.0.1:5500',//(https://your-client-app.com)
+    origin: 'http://127.0.0.1:5500',
     optionsSuccessStatus: 200,
   };
  
