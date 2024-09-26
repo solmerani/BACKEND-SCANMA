@@ -1,5 +1,5 @@
 ### Agregar Medico
-POST http://localhost:3000/api/medicos/Medico HTTP/1.1
+POST http://localhost:3000/api/medicos/register HTTP/1.1
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ### login del Medico
-POST http://localhost:3000/api/medicos/Medico/login HTTP/1.1
+POST http://localhost:3000/api/medicos/login HTTP/1.1
 Content-Type: application/json
 
 {

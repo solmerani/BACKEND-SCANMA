@@ -4,9 +4,9 @@ const router = express.Router();
 
 
 // Definir las rutas para médicos
-router.post("/Medico", medicos.createMedico);
-router.post("/Medico/:login", medicos.loginMedico);
-router.post("/Medico/:DNI", medicos.loginMedico);
+router.post("/register", medicos.createMedico);
+// router.post("/Medico/:login", medicos.loginMedico);
+router.post("/login", medicos.loginMedico);
 router.get("/Medico/:DNI", medicos.verPerfilMedico);
 router.get("/Medico", medicos.verMedicos);
 router.post("/", medicos.cambiarContraseña);
