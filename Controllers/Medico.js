@@ -52,7 +52,7 @@ const loginMedico = async (req, res) => {
     validaciones.mail(mail);
 
    // Consulta al servicio para obtener al médico basado en el correo
-   const medico = await medicoService.loginMedico(mail, contraseña);
+   const medico = await medicoService.loginMedico(mail);
 
    // Si no se encuentra un médico con ese correo, se retorna un error
    if (!medico) {

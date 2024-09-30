@@ -3,10 +3,10 @@ POST http://localhost:3000/api/medicos/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "DNI": "70985694",
+    "DNI": "67985694",
     "Nombre": "sophie",
     "Apellido": "hubermska",
-    "mail": "cacitaito3@gmail.c",
+    "mail": "oliver3@gmail.c",
     "contraseña": "Manzana!1",
     "matricula": "67834566",
     "Hospital": "bazterrica"
@@ -17,8 +17,8 @@ POST http://localhost:3000/api/medicos/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "mail": "cacitaito3@gmail.c",
-    "contraseña": "manzana!1"
+    "mail": "oliver3@gmail.c",
+    "contraseña":"Manzana!1"
 }
 
 ### Mostrar perfil de un Medico
@@ -47,14 +47,14 @@ Content-Type: application/json
 {
     "DNI": "23148382",
     "Nombre": "facundo",
-    "Apellido": "nuñez",
-    "mail": "yanilopez@gmail.com",
+    "Apellido": "nunez",
+    "mail": "yanipez@gmail.com",
     "FechaNacimiento": "1976-05-13",
     "Medico": "48116000"
 }
 
 ### Mostrar perfil de un Paciente
-GET http://localhost:3000/api/pacientes/23157892 HTTP/1.1
+GET http://localhost:3000/api/pacientes/23148382 HTTP/1.1
 ### Mostrar todos los pacientes
 GET http://localhost:3000/api/pacientes/ HTTP/1.1
 
@@ -66,11 +66,12 @@ GET http://localhost:3000/api/pacientes/pacientesMedico/48116000 HTTP/1.1
 DELETE http://localhost:3000/api/pacientes/23157892 HTTP/1.1
 
 
-### Agregar un analisis
+### Agregar el resultado
 
-POST http://localhost:3000/api/analisis/upload HTTP/1.1
+PUT http://localhost:3000/api/analisis/resultado HTTP/1.1
 
 Content-Type:form-multipart/form-data
 {
-    
+    "resultado": "positivo",
+    "DNI": "47459800"
 }

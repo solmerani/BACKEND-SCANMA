@@ -21,14 +21,22 @@ const verificarCorreo = async (mail) => {
 
 
 //login del usuario
-const loginMedico = async (mail, contraseña) => {
-    // Usando la consulta SQL directamente
-    const result = await client.query(
-        'SELECT * FROM public."Medico" WHERE mail = $1', [mail]
-    );
-    const medico = result.rows[0];
+const loginMedico = async (mail)=> {
+   
 
+    try {
+        const { rows } = await client.query(
+            'SELECT * FROM public."Medico" WHERE mail = $1', [mail]
+        );
+        if (rows.length < 1) return null;
 
+       
+        return rows[0];
+    } catch (error) {
+       
+        throw error;
+    }// Usando la consulta SQL directamente
+    
 };
 
 

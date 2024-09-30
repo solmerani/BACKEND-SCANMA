@@ -47,8 +47,8 @@ const manejarSubidaArchivo = (req, res) => {
 
 
 const getAnalisisbyPaciente = async (req,res) => {
+    const {DNI} = req.params;
     try{
- const {DNI} = req.params;
  const analisis = await analisisService.getAnalisisbyPaciente(DNI);
  if (analisis) {
     res.json(analisis);
@@ -62,13 +62,19 @@ const getAnalisisbyPaciente = async (req,res) => {
 };
 
 const updateResult = async (req,res) => {
+    const {resultado,DNI} = req.body;
     try{
-    const {resultado} = req.params;
     const result = await analisisService.updateResult(resultado);
-    }catch(error){
-        res.status(500).json({ error: 'Error al cargar el resultado' });
+    if (result) {
+        res.status(200).json({ message: 'Resultado actualizado correctamente' });
+    } else {
+        res.status(404).json({ error: 'Análisis no encontrado' });
     }
+} catch (error) {
+    console.error('Error al actualizar el resultado:', error);
+    res.status(500).json({ error: 'Error al actualizar el resultado' });
 }
+};
 
 
 const Analisis = {
