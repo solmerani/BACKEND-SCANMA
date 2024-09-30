@@ -48,6 +48,7 @@ const manejarSubidaArchivo = (req, res) => {
 
 const getAnalisisbyPaciente = async (req,res) => {
     const {DNI} = req.params;
+    console.log('DNI recibido:', DNI);
     try{
  const analisis = await analisisService.getAnalisisbyPaciente(DNI);
  if (analisis) {
@@ -60,6 +61,15 @@ const getAnalisisbyPaciente = async (req,res) => {
     res.status(500).json({ error: 'Error al obtener los analisis del paciente' });
     }
 };
+const getAllAnalisis = async (req,res)=> {
+    try {
+        const result = await analisisService.getAllAnalisis();
+    res.json(result);
+    }catch(error){
+        res.status(500).json({ error: 'Error al obtener los analisis ' });
+    }
+
+}
 
 const updateResult = async (req,res) => {
     const {resultado,DNI} = req.body;
@@ -81,7 +91,8 @@ const Analisis = {
     manejarSubidaArchivo,
     SaveAnalisis,
     getAnalisisbyPaciente,
-    updateResult
+    updateResult,
+    getAllAnalisis
    
 }
 

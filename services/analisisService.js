@@ -16,22 +16,29 @@ const SaveAnalisis = async (image, fecha, paciente, medico) => {
 const getAnalisisbyPaciente = async (DNI) => {
     
        const result= await client.query(
-            'GET * FROM public."Analisis" WHERE "Paciente" = $1'[DNI],
+            'SELECT * FROM public."Analisis" WHERE "Paciente" = $1',[DNI],
         );
         return result.rows;
    
 };
+const getAllAnalisis = async () => {
+    const result = await client.query('SELECT * FROM public."Analisis"');
+return result.rows;
+};
+
 
 const updateResult = async (resultado,DNI)  => {
 const result = await client.query(
-    'UPDATE public."Medico" SET "Resultado" = $1 WHERE "Paciente" = $2 RETURNING * '[resultado,DNI]
-)
+    'UPDATE public."Medico" SET "Resultado" = $1 WHERE "Paciente" = $2 AND "Resultado" IS NULL RETURNING * '[resultado,DNI],
+);
+return result.rows;
 
 };
 const serviceAnalisis = {
 SaveAnalisis,
 getAnalisisbyPaciente,
-updateResult
+updateResult,
+getAllAnalisis
 
 }
 
