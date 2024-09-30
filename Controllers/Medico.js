@@ -49,24 +49,40 @@ const createMedico = async (req, res) => {
 //login
 const loginMedico = async (req, res) => {
     const { mail, contraseña } = req.body;
+    const secret = "Scanmaa24";
+    console.log(mail); 
+
+    // Verificación de campos obligatorios
+    if (!mail || !contraseña) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+    
+    // Validaciones del correo
     validaciones.mail(mail);
 
-   // Consulta al servicio para obtener al médico basado en el correo
-   const medico = await medicoService.loginMedico(mail);
+    // Consulta al servicio para obtener al médico basado en el correo
+    const medico = await medicoService.loginMedico(mail);
 
-   // Si no se encuentra un médico con ese correo, se retorna un error
-   if (!medico) {
-    return res.status(400).json({error:"usuario no existe"})
-   }
+    // Si no se encuentra un médico con ese correo, se retorna un error
+    if (!medico) {
+        return res.status(400).json({ error: "El usuario no existe" });
+    }
 
-   // Comparación de la contraseña proporcionada con la almacenada
-   const isValid = await bcrypt.compare(contraseña, medico.contraseña);
-        if (!isValid) {
-            return res.status(400).json({error:"contraseña incorrecta"})
-        }
+    // Comparación de la contraseña proporcionada con la almacenada
+    const isValid = await bcrypt.compare(contraseña, medico.contraseña);
+    if (!isValid) {
+        return res.status(400).json({ error: "Contraseña incorrecta" });
+    }
 
-   // Si todo es correcto, se retorna el objeto del médico
-   res.status(200).json(medico);
+    // Generación del token
+    const token = jwt.sign(
+        { id: medico.id }, 
+        secret,
+        { expiresIn: "1h" }
+    );
+
+    // Si todo es correcto, se retorna el médico y el token
+    res.status(200).json({ medico, token });  // Se incluye el token en la respuesta
 };
 
 // Ver perfil de un médico
