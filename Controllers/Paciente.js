@@ -6,17 +6,32 @@ import pacienteService from '../services/pacienteService.js';
 const createPaciente = async (req, res) => {
     const { DNI, Nombre, Apellido, mail, FechaNacimiento, Medico } = req.body;
     //validaciones
-    if (typeof DNI != 'string') throw new Error('DNI must be a string');
-    if (DNI.length != 8) throw new Error('DNI debe contener 8 caracteres');
+    if (typeof DNI != 'string'){
+        return res.status(400).json({ error: 'DNI must be a string' });}
+    if (DNI.length != 8) {
+        return res.status(400).json({ error: 'DNI debe contener 8 carcateres' });}
     const nameRegex = /^[A-Za-z\s]+$/;
-    if (!nameRegex.test(Nombre)) throw new Error('Nombre debe contener solo letras');
-    if (Nombre.length > 50) throw new Error('Nombre no puede tener más de 50 caracteres');
-    if (!nameRegex.test(Apellido)) throw new Error('Apellido debe contener solo letras');
-    if (Apellido.length > 50) throw new Error('Apellido no puede tener más de 50 caracteres');  
-    if (typeof mail != 'string') throw new Error('mail must be a string');
-    if (mail.length < 3) throw new Error('mail debe tener más de tres caracteres');
-    if (!mail.includes('@')) throw new Error('mail debe contener un @');
-    if (mail.length > 100) throw new Error('mail no puede tener más de 100 caracteres');
+    if (!nameRegex.test(Nombre)) {
+        return res.status(400).json({ error: 'el nombre debe contener solo letras' });
+    }
+    if (Nombre.length > 50) {
+        return res.status(400).json({ error: 'el nombre no puede tener mas de 50 caracteres' });
+    }
+    if (!nameRegex.test(Apellido)) {
+        return res.status(400).json({ error: 'el apellido debe contener solo letras' });
+    }
+    if (Apellido.length > 50) {
+        return res.status(400).json({ error: 'el Apellido no puede tener mas de 50 caracteres' });
+    }
+    if (mail.length < 3) {
+        return res.status(400).json({ error: 'el mail debe tener mas de 3 caracteres' });
+    }
+    if (!mail.includes('@')) {
+        return res.status(400).json({ error: 'el mail debe contener un @' });
+    }
+    if (mail.length > 100) {
+        return res.status(400).json({ error: 'el mail no puede tener mas de 100 caracteres ' });
+    };
     
      // validacion de si el correo esta en uso
      const CorreoEnUso = await pacienteService.verificarCorreo(mail);

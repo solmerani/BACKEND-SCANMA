@@ -129,44 +129,73 @@ const deleteMedico = async (req, res) => {
 
 class validaciones {
     static DNI (DNI) {
-        if (typeof DNI != 'string') throw new Error('DNI must be a string');
-        if (DNI.length != 8) throw new Error('DNI debe contener 8 caracteres');
+        if (typeof DNI != 'string'){
+            return res.status(400).json({ error: 'DNI must be a string' });}
+        if (DNI.length != 8) {
+            return res.status(400).json({ error: 'DNI debe contener 8 carcateres' });}
     }
 
     static contraseña (contraseña) {
-        if (typeof contraseña != 'string') throw new Error('contraseña must be a string');
-        if (contraseña.length < 8) throw new Error('contraseña debe tener más de ocho caracteres');
+        if (typeof contraseña != 'string') {
+            return res.status(400).json({ error: 'la contraseña debe ser un string' });}
+        if (contraseña.length < 8){
+            return res.status(400).json({ error: 'contraseña debe tener mas de 8 caracteres' });
+        }
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordRegex.test(contraseña)) throw new Error(`contraseña debe contener al menos una 
-            letra mayúscula, una minúscula, un número y un carácter especial`);
+        if (!passwordRegex.test(contraseña)){
+            return res.status(400).json({ error: `contraseña debe contener al menos una 
+            letra mayúscula, una minúscula, un número y un carácter especial` });
+        }
     }
 
     static Nombre (Nombre) {
         const nameRegex = /^[A-Za-z\s]+$/;
-    if (!nameRegex.test(Nombre)) throw new Error('Nombre debe contener solo letras');
-    if (Nombre.length > 50) throw new Error('Nombre no puede tener más de 50 caracteres');
+    if (!nameRegex.test(Nombre)) {
+        return res.status(400).json({ error: 'el nombre debe contener solo letras' });
+    }
+    if (Nombre.length > 50) {
+        return res.status(400).json({ error: 'el nombre no puede tener mas de 50 caracteres' });
+    }
     }
 
     static Apellido (Apellido) {
         const nameRegex = /^[A-Za-z\s]+$/;
-        if (!nameRegex.test(Apellido)) throw new Error('Apellido debe contener solo letras');
-        if (Apellido.length > 50) throw new Error('Apellido no puede tener más de 50 caracteres');  
+        if (!nameRegex.test(Apellido)) {
+            return res.status(400).json({ error: 'el apellido debe contener solo letras' });
+        }
+        if (Apellido.length > 50) {
+            return res.status(400).json({ error: 'el Apellido no puede tener mas de 50 caracteres' });
+        }
     }
 
     static Hospital (Hospital){
         if (typeof Hospital != 'string' || Hospital.trim() === '') throw new Error('Hospital must be a non-empty string');
-        if (Hospital.length < 3) throw new Error('Hospital debe tener al menos 3 caracteres');
-        if (Hospital.length > 100) throw new Error('Hospital no puede tener más de 100 caracteres');
+        if (Hospital.length < 3) {
+            return res.status(400).json({ error: 'hospital debe tener al menos 3 caracteres' }); 
+        }
+        if (Hospital.length > 100) {
+            return res.status(400).json({ error: 'hospital no debe tener mas de 100 caracteres' });
+        }
     }
     static matricula (matricula){
-        if (typeof matricula != 'string') throw new Error('matricula must be a string');
-    if (matricula.length != 8) throw new Error('Matrícula debe contener 8 caracteres');
+        if (typeof matricula != 'string'){
+            return res.status(400).json({ error: 'matricula debe ser un string' });
+        }
+    if (matricula.length != 8) {
+        return res.status(400).json({ error: 'matricula debe tener  8 caracteres' });
+    }
     }
 
     static mail(mail){
-    if (mail.length < 3) throw new Error('mail debe tener más de tres caracteres');
-    if (!mail.includes('@')) throw new Error('mail debe contener un @');
-    if (mail.length > 100) throw new Error('mail no puede tener más de 100 caracteres');
+    if (mail.length < 3) {
+        return res.status(400).json({ error: 'el mail debe tener mas de 3 caracteres' });
+    }
+    if (!mail.includes('@')) {
+        return res.status(400).json({ error: 'el mail debe contener un @' });
+    }
+    if (mail.length > 100) {
+        return res.status(400).json({ error: 'el mail no puede tener mas de 100 caracteres ' });
+    }
     
     }
 };
