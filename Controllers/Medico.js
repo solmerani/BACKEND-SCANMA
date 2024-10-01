@@ -43,6 +43,7 @@ const createMedico = async (req, res) => {
 
         res.status(201).json(medico);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: error.message });
     }
 };

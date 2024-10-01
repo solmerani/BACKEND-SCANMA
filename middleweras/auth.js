@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 const verifyToken = async (req, res, next) => {
     const secret = "Scanmaa24";
     try {
