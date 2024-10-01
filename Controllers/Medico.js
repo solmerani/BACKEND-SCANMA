@@ -21,13 +21,63 @@ const createMedico = async (req, res) => {
         }
 
         // Validaciónes de los campos
-        validaciones.mail(mail);
-        validaciones.contraseña(contraseña);
-        validaciones.matricula(matricula);
-        validaciones.DNI(DNI);
-        validaciones.Nombre(Nombre);
-        validaciones.Apellido(Apellido);
-        validaciones.Hospital(Hospital);
+        //contraseña
+        if (typeof contraseña != 'string') {
+            return res.status(400).json({ error: 'la contraseña debe ser un string' });}
+        if (contraseña.length < 8){
+            return res.status(400).json({ error: 'contraseña debe tener mas de 8 caracteres' });
+        }
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(contraseña)){
+            return res.status(400).json({ error: `contraseña debe contener al menos una 
+            letra mayúscula, una minúscula, un número y un carácter especial` });
+        }
+        //mail
+        if (mail.length < 3) {
+            return res.status(400).json({ error: 'el mail debe tener mas de 3 caracteres' });
+        }
+        if (!mail.includes('@')) {
+            return res.status(400).json({ error: 'el mail debe contener un @' });
+        }
+        if (mail.length > 100) {
+            return res.status(400).json({ error: 'el mail no puede tener mas de 100 caracteres ' });
+        }
+        //matricula
+        if (typeof matricula != 'string'){
+            return res.status(400).json({ error: 'matricula debe ser un string' });
+        }
+    if (matricula.length != 8) {
+        return res.status(400).json({ error: 'matricula debe tener  8 caracteres' });
+    }
+       //DNI
+       if (typeof DNI != 'string'){
+        return res.status(400).json({ error: 'DNI must be a string' });}
+        if (DNI.length != 8) {
+        return res.status(400).json({ error: 'DNI debe contener 8 carcateres' });}
+       
+        //nombre
+        const nameRegex = /^[A-Za-z\s]+$/;
+        if (!nameRegex.test(Nombre)) {
+            return res.status(400).json({ error: 'el nombre debe contener solo letras' });
+        }
+        if (Nombre.length > 50) {
+            return res.status(400).json({ error: 'el nombre no puede tener mas de 50 caracteres' });
+        }
+        //apellido
+        if (!nameRegex.test(Apellido)) {
+            return res.status(400).json({ error: 'el apellido debe contener solo letras' });
+        }
+        if (Apellido.length > 50) {
+            return res.status(400).json({ error: 'el Apellido no puede tener mas de 50 caracteres' });
+        }
+     //hospital
+     if (typeof Hospital != 'string' || Hospital.trim() === '') throw new Error('Hospital must be a non-empty string');
+        if (Hospital.length < 3) {
+            return res.status(400).json({ error: 'hospital debe tener al menos 3 caracteres' }); 
+        }
+        if (Hospital.length > 100) {
+            return res.status(400).json({ error: 'hospital no debe tener mas de 100 caracteres' });
+        }
 
         //Hasheo de contraseña
         const salt = await bcrypt.genSalt(10);
@@ -59,7 +109,15 @@ const loginMedico = async (req, res) => {
     }
     
     // Validaciones del correo
-    validaciones.mail(mail);
+    if (mail.length < 3) {
+        return res.status(400).json({ error: 'el mail debe tener mas de 3 caracteres' });
+    }
+    if (!mail.includes('@')) {
+        return res.status(400).json({ error: 'el mail debe contener un @' });
+    }
+    if (mail.length > 100) {
+        return res.status(400).json({ error: 'el mail no puede tener mas de 100 caracteres ' });
+    }
 
     // Consulta al servicio para obtener al médico basado en el correo
     const medico = await medicoService.loginMedico(mail);
@@ -121,7 +179,17 @@ const cambiarContraseña = async (req, res) => {
         if (!DNI || !nuevaContraseña) {
             return res.status(400).json({ error: 'DNI y nueva contraseña son obligatorios' });
         }
-        validaciones.contraseña(nuevaContraseña);
+        //validaciones de la contraseña
+        if (typeof contraseña != 'string') {
+            return res.status(400).json({ error: 'la contraseña debe ser un string' });}
+        if (contraseña.length < 8){
+            return res.status(400).json({ error: 'contraseña debe tener mas de 8 caracteres' });
+        }
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(contraseña)){
+            return res.status(400).json({ error: `contraseña debe contener al menos una 
+            letra mayúscula, una minúscula, un número y un carácter especial` });
+        }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(nuevaContraseña, salt);
         const medico = await medicoService.cambiarContraseña(DNI, hashedPassword);
@@ -144,78 +212,6 @@ const deleteMedico = async (req, res) => {
 };
 
 
-class validaciones {
-    static DNI (DNI) {
-        if (typeof DNI != 'string'){
-            return res.status(400).json({ error: 'DNI must be a string' });}
-        if (DNI.length != 8) {
-            return res.status(400).json({ error: 'DNI debe contener 8 carcateres' });}
-    }
-
-    static contraseña (contraseña) {
-        if (typeof contraseña != 'string') {
-            return res.status(400).json({ error: 'la contraseña debe ser un string' });}
-        if (contraseña.length < 8){
-            return res.status(400).json({ error: 'contraseña debe tener mas de 8 caracteres' });
-        }
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordRegex.test(contraseña)){
-            return res.status(400).json({ error: `contraseña debe contener al menos una 
-            letra mayúscula, una minúscula, un número y un carácter especial` });
-        }
-    }
-
-    static Nombre (Nombre) {
-        const nameRegex = /^[A-Za-z\s]+$/;
-    if (!nameRegex.test(Nombre)) {
-        return res.status(400).json({ error: 'el nombre debe contener solo letras' });
-    }
-    if (Nombre.length > 50) {
-        return res.status(400).json({ error: 'el nombre no puede tener mas de 50 caracteres' });
-    }
-    }
-
-    static Apellido (Apellido) {
-        const nameRegex = /^[A-Za-z\s]+$/;
-        if (!nameRegex.test(Apellido)) {
-            return res.status(400).json({ error: 'el apellido debe contener solo letras' });
-        }
-        if (Apellido.length > 50) {
-            return res.status(400).json({ error: 'el Apellido no puede tener mas de 50 caracteres' });
-        }
-    }
-
-    static Hospital (Hospital){
-        if (typeof Hospital != 'string' || Hospital.trim() === '') throw new Error('Hospital must be a non-empty string');
-        if (Hospital.length < 3) {
-            return res.status(400).json({ error: 'hospital debe tener al menos 3 caracteres' }); 
-        }
-        if (Hospital.length > 100) {
-            return res.status(400).json({ error: 'hospital no debe tener mas de 100 caracteres' });
-        }
-    }
-    static matricula (matricula){
-        if (typeof matricula != 'string'){
-            return res.status(400).json({ error: 'matricula debe ser un string' });
-        }
-    if (matricula.length != 8) {
-        return res.status(400).json({ error: 'matricula debe tener  8 caracteres' });
-    }
-    }
-
-    static mail(mail){
-    if (mail.length < 3) {
-        return res.status(400).json({ error: 'el mail debe tener mas de 3 caracteres' });
-    }
-    if (!mail.includes('@')) {
-        return res.status(400).json({ error: 'el mail debe contener un @' });
-    }
-    if (mail.length > 100) {
-        return res.status(400).json({ error: 'el mail no puede tener mas de 100 caracteres ' });
-    }
-    
-    }
-};
 
 
 const medicos = {
