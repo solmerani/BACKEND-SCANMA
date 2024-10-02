@@ -29,7 +29,7 @@ return result.rows;
 
 const updateResult = async (resultado,DNI)  => {
 const result = await client.query(
-    'UPDATE public."Medico" SET "Resultado" = $1 WHERE "Paciente" = $2 '[resultado,DNI],
+    'UPDATE public."Analisis" SET "Resultado" = $1 WHERE "Paciente" = $2 ',[resultado,DNI],
 );
 return result.rows;
 
