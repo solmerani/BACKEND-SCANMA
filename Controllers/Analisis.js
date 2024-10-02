@@ -22,8 +22,20 @@ const manejarSubidaArchivo = (req, res) => {
     const SaveAnalisis = async (req, res) => {
         
         const image = req.file.path;
-        const { paciente, medico } = req.body;
+        const { paciente, medico,notas } = req.body;
         const fecha = Date.now()
+        // Validación para campos requeridos
+    if (!image ) {
+        return res.status(400).json({
+            message: ' Es necesario subir una imagen.'
+        });
+    }
+    if (!paciente || !medico ) {
+        return res.status(400).json({
+            message: ' Estos campos son requeridos'
+        });
+    }
+
         try {
             const uploadImage = await cloudinary.uploader.upload(image, {
                 folder: 'analisis',
@@ -32,7 +44,7 @@ const manejarSubidaArchivo = (req, res) => {
             const imageUrl = uploadImage.secure_url;
     
             console.log(imageUrl);
-            await analisisService.SaveAnalisis(imageUrl, fecha, paciente, medico);
+            await analisisService.SaveAnalisis(imageUrl, fecha, paciente, medico,notas);
             res.status(200).json({
                 message: 'Imagen subida y URL guardada correctamente',
                 imageUrl: imageUrl

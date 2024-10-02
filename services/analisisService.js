@@ -1,11 +1,11 @@
 import {client} from  '../db.js';
 
-const SaveAnalisis = async (image, fecha, paciente, medico) => {
+const SaveAnalisis = async (image, fecha, paciente, medico,notas) => {
     try {
         const fechaValida = new Date(parseInt(fecha)).toISOString();
         await client.query(
-            'INSERT INTO public."Analisis" ("Imagen","Fecha", "Paciente","Medico") VALUES ($1, $2, $3, $4)',
-            [image, fechaValida, paciente, medico],
+            'INSERT INTO public."Analisis" ("Imagen","Fecha", "Paciente","Medico","Resultado","notas") VALUES ($1, $2, $3, $4,$5,$6)',
+            [image, fechaValida, paciente, medico,false,notas],
         );
     } catch (error) {
         console.error('Error saving URL to database:', error);
@@ -29,7 +29,7 @@ return result.rows;
 
 const updateResult = async (resultado,DNI)  => {
 const result = await client.query(
-    'UPDATE public."Medico" SET "Resultado" = $1 WHERE "Paciente" = $2 AND "Resultado" IS NULL '[resultado,DNI],
+    'UPDATE public."Medico" SET "Resultado" = $1 WHERE "Paciente" = $2 '[resultado,DNI],
 );
 return result.rows;
 
