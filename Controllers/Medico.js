@@ -3,6 +3,7 @@ import { client } from "../db.js";
 import crypto from 'node:crypto';
 import medicoService from '../services/medicoService.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 // Agregar un nuevo médico
 const createMedico = async (req, res) => {

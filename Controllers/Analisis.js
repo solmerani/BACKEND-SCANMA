@@ -86,7 +86,7 @@ const getAllAnalisis = async (req,res)=> {
 const updateResult = async (req,res) => {
     const {resultado,DNI} = req.body;
     try{
-    const result = await analisisService.updateResult(resultado);
+    const result = await analisisService.updateResult(resultado,DNI);
     if (result) {
         res.status(200).json({ message: 'Resultado actualizado correctamente' });
     } else {
