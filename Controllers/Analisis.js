@@ -88,6 +88,7 @@ const updateResult = async (req,res) => {
     try{
     const result = await analisisService.updateResult(resultado,DNI);
     if (result) {
+        console.log(resultado);
         res.status(200).json({ message: 'Resultado actualizado correctamente' });
     } else {
         res.status(404).json({ error: 'Análisis no encontrado' });

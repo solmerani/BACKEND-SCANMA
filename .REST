@@ -69,8 +69,8 @@ DELETE http://localhost:3000/api/pacientes/23157892 HTTP/1.1
 ### Agregar el resultado
 
 PUT http://localhost:3000/api/analisis/resultado HTTP/1.1
-
 Content-Type:application/json
+
 {
     "resultado": true,
     "DNI": "231483892"
