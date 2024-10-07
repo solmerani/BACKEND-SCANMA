@@ -1,5 +1,4 @@
 
-import { client } from "../db.js";
 import crypto from 'node:crypto';
 import medicoService from '../services/medicoService.js';
 import bcrypt from 'bcryptjs';

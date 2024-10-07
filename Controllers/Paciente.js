@@ -1,4 +1,4 @@
-import { client } from "../db.js";
+
 import medicos from "../Controllers/Medico.js";
 import pacienteService from '../services/pacienteService.js';
 

@@ -1,7 +1,7 @@
 import pkg from 'pg';
-const { Client } = pkg;
+const { Pool } = pkg;
 
-const client = new Client({
+const pool = new Pool({
     user: 'default',
     host: 'ep-still-dream-a4m64z7d-pooler.us-east-1.aws.neon.tech',
     database: 'scanma-database',
@@ -10,6 +10,6 @@ const client = new Client({
     ssl: true,
 });
 
-client.connect(); // Nos conectamos a la base de datos
+pool.connect(); // Nos conectamos a la base de datos
 
-export { client };
+export { pool };
