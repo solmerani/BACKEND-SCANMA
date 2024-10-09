@@ -7,9 +7,7 @@ const pool = new Pool({
     database: 'scanma-database',
     password: 'RoEg2cd0sWzD',
     port: 5432,
-    ssl: {
-        rejectUnauthorized: false, // Si es necesario en entornos seguros
-      },
+    ssl:true,
 });
 
 pool.connect(); // Nos conectamos a la base de datos
