@@ -35,12 +35,13 @@ const manejarSubidaArchivo = (req, res) => {
             message: ' Estos campos son requeridos'
         });
     }
+  
 
         try {
             const uploadImage = await cloudinary.uploader.upload(image, {
                 folder: 'analisis',
             });
-    
+   
             const imageUrl = uploadImage.secure_url;
     
             console.log(imageUrl);
@@ -49,8 +50,9 @@ const manejarSubidaArchivo = (req, res) => {
                 message: 'Imagen subida y URL guardada correctamente',
                 imageUrl: imageUrl
             });
-            console.log(error);
+           
         }catch (error){
+         
             console.error('Error al subir imagen:', error);
             res.status(500).json({ message: 'Error al subir imagen' });
         }
