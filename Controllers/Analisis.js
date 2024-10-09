@@ -21,7 +21,7 @@ const manejarSubidaArchivo = (req, res) => {
     const SaveAnalisis = async (req, res) => {
         
         const image = req.file.path;
-        const { paciente, medico,notas } = req.body;
+        const { paciente,notas } = req.body;
         const medicoDni = req.userDNI;
         const fecha = Date.now()
         // Validación para campos requeridos
