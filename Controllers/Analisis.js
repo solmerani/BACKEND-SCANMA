@@ -30,7 +30,7 @@ const manejarSubidaArchivo = (req, res) => {
             message: ' Es necesario subir una imagen.'
         });
     }
-    if (!paciente || !medico ) {
+    if (!paciente) {
         return res.status(400).json({
             message: ' Estos campos son requeridos'
         });
@@ -49,6 +49,7 @@ const manejarSubidaArchivo = (req, res) => {
                 message: 'Imagen subida y URL guardada correctamente',
                 imageUrl: imageUrl
             });
+            console.log(error);
         }catch (error){
             console.error('Error al subir imagen:', error);
             res.status(500).json({ message: 'Error al subir imagen' });
