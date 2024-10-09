@@ -7,7 +7,7 @@ const routerA = express.Router();
 
 
 // Ruta para subir análisis
-routerA.post('/upload',verifyToken, upload.single('image'), Analisis.SaveAnalisis);
+routerA.post('/upload', upload.single('image'), Analisis.SaveAnalisis);
 routerA.get('/:DNI', Analisis.getAnalisisbyPaciente);
 routerA.put('/resultado', Analisis.updateResult);
 routerA.get('/all', Analisis.getAllAnalisis);
