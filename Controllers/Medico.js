@@ -222,9 +222,8 @@ const medicos = {
     deleteMedico,
     verPerfilMedico,
     verMedicos,
-    RecuperarContraseña,
     cambiarContraseña,
-    enviarEmail
+  
  
 
 };
