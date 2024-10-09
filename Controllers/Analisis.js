@@ -52,7 +52,7 @@ const manejarSubidaArchivo = (req, res) => {
             });
            
         }catch (error){
-         
+         console.log(error);
             console.error('Error al subir imagen:', error);
             res.status(500).json({ message: 'Error al subir imagen' });
         }
