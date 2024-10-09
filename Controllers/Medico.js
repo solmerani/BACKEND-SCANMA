@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import medicoService from '../services/medicoService.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer';
+
 
 // Agregar un nuevo médico
 const createMedico = async (req, res) => {
@@ -170,55 +170,7 @@ const verMedicos = async (req, res) => {
     }
 };
 
-// recuperar la contraseña
-const RecuperarContraseña = async (req,res)=> {
-    const email = req.params;
 
-    if (!email) {
-        return res.status(400).json({error:'El email es obligatorio'});
-    }
-    const medico = await medicoService.verificarCorreo(email);
-
-    if(!medico) {
-        return res.status(404).json({error:'el email no esta registrado'});
-    }
-    //crear u token de recuperacion
-    const token = jwt.sign(
-        { id: medico.DNI }, 
-        "Scanmaa24", 
-        { expiresIn: '1h' }
-
-    );
-    // Enviar el token por correo electrónico
-    // Usa un servicio como nodemailer para enviar el correo con el enlace de recuperación
-    const resetLink = `http://miapp.com/resetear-contraseña/${token}`;
-
-    // Enviar el correo al médico (esto es un ejemplo, implementa nodemailer u otro servicio de correo)
-     await enviarEmail(medico.email, resetLink);
-}
-//enviar el email
-const enviarEmail = async (email, resetLink)=> {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail', // o cualquier otro servicio
-        auth: {
-            user: 'tuEmail@gmail.com',
-            pass: 'tuContraseña'
-        }
-    });
-    const mailOptions = {
-        from: 'tuEmail@gmail.com',
-        to: email,
-        subject: 'Recuperación de contraseña',
-        text: `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`
-    };
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Correo enviado con éxito');
-    } catch (error) {
-        console.error('Error al enviar el correo', error);
-        throw error;
-    }
-}
 //Cambiar contraseña 
 const cambiarContraseña = async (req, res) => {
     try {
