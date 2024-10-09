@@ -16,13 +16,15 @@ const verifyToken = async (req, res, next) => {
             return res.status(401).json({ message: 'Invalid token format' });
         }
 
-        const decoded = jwt.verify(token, secret);
-        if (!decoded || !decoded.id) {
+         // Comprobación si el token contiene un DNI válido
+         if (!decoded || !decoded.DNI) {
             return res.status(401).json({ message: 'Invalid token' });
         }
 
-        req.userId = decoded.id;
-        next();
+        // Almacenamos el DNI del médico en el objeto req
+        req.userDNI = decoded.DNI;  // El DNI del médico
+
+        next();  // Pasamos al siguiente middleware o controlador
     } catch (error) {
         return res.status(401).json({ message: 'Unauthorized', error: error.message });
     }

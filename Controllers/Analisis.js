@@ -22,6 +22,7 @@ const manejarSubidaArchivo = (req, res) => {
         
         const image = req.file.path;
         const { paciente, medico,notas } = req.body;
+        const medicoDni = req.userDNI;
         const fecha = Date.now()
         // Validación para campos requeridos
     if (!image ) {
@@ -43,7 +44,7 @@ const manejarSubidaArchivo = (req, res) => {
             const imageUrl = uploadImage.secure_url;
     
             console.log(imageUrl);
-            await analisisService.SaveAnalisis(imageUrl, fecha, paciente, medico,notas);
+            await analisisService.SaveAnalisis(imageUrl, fecha, paciente,medicoDni,notas);
             res.status(200).json({
                 message: 'Imagen subida y URL guardada correctamente',
                 imageUrl: imageUrl

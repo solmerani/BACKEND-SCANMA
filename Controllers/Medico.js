@@ -133,9 +133,9 @@ const loginMedico = async (req, res) => {
         return res.status(400).json({ error: "Contraseña incorrecta" });
     }
 
-    // Generación del token
+    // Generar token incluyendo el DNI además del id del médico
     const token = jwt.sign(
-        { id: medico.id }, 
+        { id: medico.id, dni: medico.dni },  // Incluimos el DNI aquí
         secret,
         { expiresIn: "1h" }
     );
