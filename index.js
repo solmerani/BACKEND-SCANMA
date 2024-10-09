@@ -11,7 +11,8 @@ const app = express();
 const corsOptions = {
     origin: 'http://127.0.0.1:5500',
     optionsSuccessStatus: 200,
-    
+    methods: 'GET,POST,PUT,DELETE', // Especifica los métodos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'],
   };
  
   app.use(cors(corsOptions));
