@@ -1,12 +1,12 @@
 import {  pool } from "../db.js";
 
 // Agregar un nuevo paciente
-const createPaciente = async (DNI, Nombre, Apellido, mail, FechaNacimiento, Medico) => {
+const createPaciente = async (DNI, Nombre, Apellido, mail, FechaNacimiento, ) => {
     const result = await pool.query(
-        `INSERT INTO public."Paciente" ("DNI-Paciente", "Nombre", "Apellido", "Mail", "Fecha Nacimiento", "Medico") 
+        `INSERT INTO public."Paciente" ("DNI-Paciente", "Nombre", "Apellido", "Mail", "Fecha Nacimiento", "") 
              VALUES ($1, $2, $3, $4, $5, $6) 
              RETURNING *`,
-        [DNI, Nombre, Apellido, mail, FechaNacimiento, Medico]
+        [DNI, Nombre, Apellido, mail, FechaNacimiento, ]
     );
     return result.rows[0];
 };

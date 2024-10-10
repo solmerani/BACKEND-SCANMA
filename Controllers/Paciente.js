@@ -4,7 +4,7 @@ import pacienteService from '../services/pacienteService.js';
 
 // Agregar un nuevo paciente
 const createPaciente = async (req, res) => {
-    const { DNI, Nombre, Apellido, mail, FechaNacimiento, Medico } = req.body;
+    const { DNI, Nombre, Apellido, mail, FechaNacimiento,  } = req.body;
     //validaciones
     if (typeof DNI != 'string'){
         return res.status(400).json({ error: 'DNI must be a string' });}
