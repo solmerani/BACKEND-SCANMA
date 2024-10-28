@@ -1,5 +1,5 @@
 import axios  from 'axios';
-const FormData = require('form-data');
+import FormData  from 'form-data';
 const render = 'quintoproyecto.onrender.com'; 
 
 
