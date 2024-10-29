@@ -100,12 +100,12 @@ const createMedico = async (req, res) => {
 };
 //login
 const loginMedico = async (req, res) => {
-    const { mail, contraseña } = req.body;
+    const { mail, password } = req.body;
     const secret = "Scanmaa24";
     console.log(mail); 
 
     // Verificación de campos obligatorios
-    if (!mail || !contraseña) {
+    if (!mail || !password) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
     
@@ -129,7 +129,7 @@ const loginMedico = async (req, res) => {
     }
 
     // Comparación de la contraseña proporcionada con la almacenada
-    const isValid = await bcrypt.compare(contraseña, medico.contraseña);
+    const isValid = await bcrypt.compare(password, medico.contraseña);
     if (!isValid) {
         return res.status(400).json({ error: "Contraseña incorrecta" });
     }
