@@ -102,7 +102,7 @@ const createMedico = async (req, res) => {
 const loginMedico = async (req, res) => {
     const { mail, password } = req.body;
     const secret = "Scanmaa24";
-    console.log(mail); 
+     
 
     // Verificación de campos obligatorios
     if (!mail || !password) {
