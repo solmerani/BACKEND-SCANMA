@@ -107,17 +107,21 @@ const loginMedico = async (req, res) => {
     // Verificación de campos obligatorios
     if (!mail || !password) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+        console.log("error 1"); 
     }
     
     // Validaciones del correo
     if (mail.length < 3) {
         return res.status(400).json({ error: 'el mail debe tener mas de 3 caracteres' });
+        console.log("error 2"); 
     }
     if (!mail.includes('@')) {
         return res.status(400).json({ error: 'el mail debe contener un @' });
+        console.log("error 3"); 
     }
     if (mail.length > 100) {
         return res.status(400).json({ error: 'el mail no puede tener mas de 100 caracteres ' });
+        console.log("error 4"); 
     }
 
     // Consulta al servicio para obtener al médico basado en el correo
@@ -126,12 +130,14 @@ const loginMedico = async (req, res) => {
     // Si no se encuentra un médico con ese correo, se retorna un error
     if (!medico) {
         return res.status(400).json({ error: "El usuario no existe" });
+        console.log("error 4"); 
     }
 
     // Comparación de la contraseña proporcionada con la almacenada
     const isValid = await bcrypt.compare(password, medico.contraseña);
     if (!isValid) {
         return res.status(400).json({ error: "Contraseña incorrecta" });
+        console.log("error 5"); 
     }
 
     // Generar token incluyendo el DNI además del id del médico
