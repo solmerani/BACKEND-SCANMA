@@ -1,11 +1,11 @@
 import {pool} from  '../db.js';
 
-const SaveAnalisis = async (image, fecha, paciente, medico,notas) => {
+const SaveAnalisis = async (image, fecha, paciente, medico) => {
     try {
         const fechaValida = new Date(parseInt(fecha)).toISOString();
         await pool.query(
             'INSERT INTO public."Analisis" ("Imagen","Fecha", "Paciente","Medico","Resultado","notas") VALUES ($1, $2, $3, $4,$5,$6)',
-            [image, fechaValida, paciente, medico,false,notas],
+            [image, fechaValida, paciente, medico,false,false],
         );
     } catch (error) {
         console.error('Error saving URL to database:', error);
