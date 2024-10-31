@@ -3,10 +3,10 @@ POST https://backend-scanma.vercel.app/api/medicos/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "DNI": "07085690",
+    "DNI": "45085690",
     "Nombre": "sophie",
     "Apellido": "hubermska",
-    "mail": "ho3@gmail.c",
+    "mail": "6yr@gmail.c",
     "contraseña": "Manzana!1",
     "matricula": "67834566",
     "Hospital": "bazterrica"
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### Mostrar perfil de un Medico
-GET http://localhost:3000/api/medicos/48180795 HTTP/1.1
+GET http://localhost:3000/api/medicos/ HTTP/1.1
 
 ### Mostrar todos los Medicoa
 GET http://localhost:3000/api/medicos HTTP/1.1
