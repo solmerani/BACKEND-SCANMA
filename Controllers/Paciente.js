@@ -38,9 +38,11 @@ const createPaciente = async (req, res) => {
          return res.status(400).json({error:"el mail ya esta en uso"})
      }
     try {
-        const paciente = await pacienteService.createPaciente(DNI, Nombre, Apellido, mail, FechaNacimiento, Medico);
+        const paciente = await pacienteService.createPaciente(DNI, Nombre, Apellido, mail, FechaNacimiento);
         res.status(201).json(paciente);
+       
     } catch (error) {
+        
         res.status(500).json({ error: 'Error al agregar el paciente' });
     }
 };
