@@ -71,6 +71,7 @@ const GuardarToken = async (token, DNI) => {
         [token, expiracion, DNI]
     );
     return result.rows[0];
+    
 };
 
 // Cambiar contraseña

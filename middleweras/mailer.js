@@ -2,12 +2,16 @@ import nodemailer from 'nodemailer';
  
 //configuracion de nodemailer
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    service: "gmail",
     port: 587,
     secure: false,
     auth: {
-      user: "scanma24@gmail.com",
+      user: "scanma2024@gmail.com",
       pass: "Proyecto2024",
+    },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
     },
   });
 
@@ -17,7 +21,7 @@ const transporter = nodemailer.createTransport({
 
 
     const mailOptions = {
-        from: '"Scanma!" <scanma24@gmail.com>',
+        from: '"Scanma!" <scanma2024@gmail.com>',
         to: destinatario,
         subject: "Recuperación de Contraseña",
         html: `<p>Haga clic en el siguiente enlace para restablecer su contraseña:</p><a href="${linkRecuperacion}">Restablecer Contraseña</a>`,
@@ -28,7 +32,7 @@ const transporter = nodemailer.createTransport({
       } catch (error) {
         console.error("Error al enviar el correo:", error);
       }
-   
+     
   };
 
 

@@ -182,11 +182,13 @@ const verMedicos = async (req, res) => {
 const SolicitarRecuperacion = async(req,res)=> {
     try {
         const {mail} = req.body;
-        const usuario = await medicoService.verificarCorreo(mail);
         const secret = "Scanmaa24";
+        console.log(mail);
+        const usuario = await medicoService.loginMedico(mail);
+        // Si no se encuentra un médico con ese correo, se retorna un error
         if (!usuario) {
-            return res.status(404).json({message:"Usuario no encontrado"})
-        };
+            return res.status(400).json({ error: "El usuario no existe" });
+        }
          // Genera un token seguro usando el DNI como ID
         const token = jwt.sign(
             { dni: usuario.DNI },  
@@ -195,7 +197,7 @@ const SolicitarRecuperacion = async(req,res)=> {
         );
 
   // Guarda el token hasheado en tu base de datos (puedes usar un campo en el usuario)
-  await GuardarToken (usuario.DNI, token); // Implementa esta función según tu lógica
+  await medicoService.GuardarToken (usuario.DNI, token); // Implementa esta función según tu lógica
 
 
   // Envía el correo con el token original
@@ -205,6 +207,7 @@ const SolicitarRecuperacion = async(req,res)=> {
   res.status(200).json({ message: "Se ha enviado un enlace de recuperación a tu correo." });
     }
     catch(error){
+        console.log(error);
         res.status(500).json({ error: 'Error al procesar la solicitud' });
     }
 };
@@ -214,7 +217,8 @@ const cambiarContraseña = async (req, res) => {
     try {
         const { token } = req.query;
         const { newPassword } = req.body;
-
+        const secret = "Scanmaa24";
+        const decoded = jwt.verify(token, secret);
         // Verifica el token y la fecha de expiración en la base de datos
       const usuario = await medicoService.verificarToken(token);
       if (!usuario || usuario.resetTokenExpires < new Date()) {
