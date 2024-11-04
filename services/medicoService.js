@@ -3,11 +3,13 @@ import bcrypt from "bcryptjs";
 
 // Agregar un nuevo médico
 const createMedico = async (DNI, nombre, apellido, mail, hashedPassword, matricula, hospital) => {
+    const expiracion = new Date();
+    expiracion.setHours(expiracion.getHours() + 1);
     const result = await pool.query(
         `INSERT INTO public."Medico" ("DNI", "Nombre", "Apellido", "mail", "contraseña", "matricula", "Hospital","resetToken","resetTokenExpires") 
              VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9) 
              RETURNING *`,
-        [DNI, nombre, apellido, mail, hashedPassword, matricula, hospital,null,null]
+        [DNI, nombre, apellido, mail, hashedPassword, matricula, hospital,null,expiracion]
     );
     return result.rows[0];
 };
