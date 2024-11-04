@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 import medicoService from '../services/medicoService.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import EnviarMail from '../middleweras/mailer.js';
 
 
 // Agregar un nuevo médico
@@ -177,35 +178,62 @@ const verMedicos = async (req, res) => {
 };
 
 
-//Cambiar contraseña 
+//recuperacion de contraseña
+const SolicitarRecuperacion = async(req,res)=> {
+    try {
+        const {mail} = req.body;
+        const usuario = await medicoService.verificarCorreo(mail);
+        const secret = "Scanmaa24";
+        if (!usuario) {
+            return res.status(404).json({message:"Usuario no encontrado"})
+        };
+         // Genera un token seguro usando el DNI como ID
+        const token = jwt.sign(
+            { dni: usuario.DNI },  
+            secret,
+            { expiresIn: "1h" }  // Expira en 1 hora
+        );
+
+  // Guarda el token hasheado en tu base de datos (puedes usar un campo en el usuario)
+  await GuardarToken (usuario.DNI, token); // Implementa esta función según tu lógica
+
+
+  // Envía el correo con el token original
+  await EnviarMail(mail, token);
+
+
+  res.status(200).json({ message: "Se ha enviado un enlace de recuperación a tu correo." });
+    }
+    catch(error){
+        res.status(500).json({ error: 'Error al procesar la solicitud' });
+    }
+};
+
+//Cambiar contraseña
 const cambiarContraseña = async (req, res) => {
     try {
-        const { DNI, nuevaContraseña } = req.body;
+        const { token } = req.query;
+        const { newPassword } = req.body;
 
-        // Validar los inputs
-        if (!DNI || !nuevaContraseña) {
-            return res.status(400).json({ error: 'DNI y nueva contraseña son obligatorios' });
-        }
-        //validaciones de la contraseña
-        if (typeof contraseña != 'string') {
-            return res.status(400).json({ error: 'la contraseña debe ser un string' });}
-        if (contraseña.length < 8){
-            return res.status(400).json({ error: 'contraseña debe tener mas de 8 caracteres' });
-        }
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordRegex.test(contraseña)){
-            return res.status(400).json({ error: `contraseña debe contener al menos una 
-            letra mayúscula, una minúscula, un número y un carácter especial` });
-        }
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(nuevaContraseña, salt);
-        const medico = await medicoService.cambiarContraseña(DNI, hashedPassword);
+        // Verifica el token y la fecha de expiración en la base de datos
+      const usuario = await medicoService.verificarToken(token);
+      if (!usuario || usuario.resetTokenExpires < new Date()) {
+          return res.status(400).json({ message: "Token inválido o expirado" });
+      };
+            // Hashea la nueva contraseña
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-        res.status(200).json({ message: 'Contraseña cambiada correctamente', medico });
+            // Actualiza la contraseña en la base de datos
+            await medicoService.cambiarContraseña(decoded.DNI, hashedPassword); // Asegúrate de tener esta función en tu servicio
+
+
+            res.status(200).json({ message: 'Contraseña cambiada correctamente' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Eliminar perfil de un médico
 const deleteMedico = async (req, res) => {
@@ -229,6 +257,8 @@ const medicos = {
     verPerfilMedico,
     verMedicos,
     cambiarContraseña,
+    SolicitarRecuperacion,
+   
   
  
 
