@@ -7,7 +7,7 @@ const createMedico = async (DNI, nombre, apellido, mail, hashedPassword, matricu
         `INSERT INTO public."Medico" ("DNI", "Nombre", "Apellido", "mail", "contraseña", "matricula", "Hospital","resetToken","resetTokenExpires") 
              VALUES ($1, $2, $3, $4, $5, $6, $7,$8,$9) 
              RETURNING *`,
-        [DNI, nombre, apellido, mail, hashedPassword, matricula, hospital,false,false]
+        [DNI, nombre, apellido, mail, hashedPassword, matricula, hospital,null,null]
     );
     return result.rows[0];
 };
@@ -64,7 +64,7 @@ const verificarToken = async (token) => {
 const GuardarToken = async (token, DNI) => {
     const expiracion = new Date();
     expiracion.setHours(expiracion.getHours() + 1); // Expira en 1 hora
-    const result = await pool.querey(
+    const result = await pool.query(
         `UPDATE public."Medico" SET "resetToken" = $1, "resetTokenExpires" = $2 WHERE "DNI" = $3`,
         [token, expiracion, DNI]
     );
