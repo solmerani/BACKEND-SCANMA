@@ -6,7 +6,9 @@ import pacienteService from '../services/pacienteService.js';
 const createPaciente = async (req, res) => {
     const { DNI, Nombre, Apellido, mail, FechaNacimiento,  } = req.body;
     //validaciones
-  
+    if (!DNI){
+        return res.status(400).json({ error: 'DNI es necesario' });}
+    
     if (DNI.length != 8) {
         return res.status(400).json({ error: 'DNI debe contener 8 carcateres' });}
     const nameRegex = /^[A-Za-z\s]+$/;

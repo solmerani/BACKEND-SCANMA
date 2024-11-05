@@ -45,10 +45,10 @@ POST http://localhost:3000/api/pacientes/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "DNI": "22848382",
+    "DNI": "20348382",
     "Nombre": "facundo",
     "Apellido": "nunez",
-    "mail": "yajdbcdsfez@gmail.com",
+    "mail": "yajdsfez@gmail.com",
     "FechaNacimiento": "1976-05-13"
     
 }
