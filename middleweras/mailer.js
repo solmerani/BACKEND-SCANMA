@@ -1,13 +1,14 @@
 import nodemailer from 'nodemailer';
- 
+import dotenv from 'dotenv';
+dotenv.config();
 //configuracion de nodemailer
 const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 587,
     secure: false,
     auth: {
-      user: "scanma2024@gmail.com",
-      pass: "Proyecto2024",
+      user: "Elopez@satrendy.com.ar",
+      pass:process.env.APP_PASSWORD
     },
     tls: {
       // do not fail on invalid certs
@@ -21,7 +22,7 @@ const transporter = nodemailer.createTransport({
 
 
     const mailOptions = {
-        from: '"Scanma!" <scanma2024@gmail.com>',
+        from: '"Scanma!" <Elopez@satrendy.com.ar>',
         to: destinatario,
         subject: "Recuperación de Contraseña",
         html: `<p>Haga clic en el siguiente enlace para restablecer su contraseña:</p><a href="${linkRecuperacion}">Restablecer Contraseña</a>`,
