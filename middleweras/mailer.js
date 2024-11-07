@@ -18,7 +18,8 @@ const transporter = nodemailer.createTransport({
 
 
   const EnviarMail = async (destinatario, token) => {
-    const linkRecuperacion = `http://tu-dominio.com/restablecer-password?token=${token}`;
+    const linkRecuperacion = `http://127.0.0.1:5500/Proyecto2024/signin/recuperarcontra.html
+    token=${token}`;
 
 
     const mailOptions = {
