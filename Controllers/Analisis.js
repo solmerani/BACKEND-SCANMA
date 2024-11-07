@@ -1,5 +1,6 @@
 import cloudinary from "../middleweras/upload.js";
 import analisisService from "../services/analisisService.js";
+import fs from 'fs';
 import upload from '../middleweras/multer.js';
 
 //extensiones de archivos
@@ -19,7 +20,6 @@ const manejarSubidaArchivo = (req, res) => {
 
 //subir imagenes a cloudinary
     const SaveAnalisis = async (req, res) => {
-        
         const image = req.file.path;
         const { paciente,notas } = req.body;
         const medicoDni = req.userDNI;
@@ -35,7 +35,6 @@ const manejarSubidaArchivo = (req, res) => {
             message: ' Estos campos son requeridos'
         });
     }
-  
 
         try {
             const uploadImage = await cloudinary.uploader.upload(image, {
@@ -57,8 +56,60 @@ const manejarSubidaArchivo = (req, res) => {
             res.status(500).json({  message: 'Internal Server Error', error: error.message  });
         }
        
-    
+    //conexion con ia 
+
+    try {
+        const body = { url: imageUrl };
+        const response = await fetch("https://project-malaria.onrender.com/analyze_image", {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+        const data = await response.json();
+        console.log(data);
+        const prediccion = data.prediction;
+        if (prediccion === "Infectado") {
+            const resultado = true;
+            try {
+                await analisisService.updateResult(resultado,paciente);
+                console.log('Resultado actualizado correctamente');
+            } catch (error) {
+                console.error('Error al actualizar resultado:', error);
+                res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+            }
+        }
+        else if (prediccion === "Sano") {
+            const resultado = false;
+            try {
+                await analisisService.updateResult(resultado,paciente);
+                console.log('Resultado actualizado correctamente');
+            } catch (error) {
+                console.error('Error al actualizar resultado:', error);
+                res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+            }
+        }
+        
+        if (response.ok) {
+            // Eliminar el archivo local después de subirlo y analizarlo
+            fs.unlink(image, (err) => {
+                if (err) {
+                    console.error('Error al eliminar el archivo local:', err);
+                } else {
+                    console.log('Archivo local eliminado correctamente');
+                }
+            });
+
+            return res.json({ message: "Análisis subido correctamente", imageUrl });
+        } else {
+            console.error('Error en la respuesta de análisis:', data.message);
+            return res.status(500).json({ message: "Error al subir análisis" });
+        }
+    } catch (err) {
+        console.error('Error al conectar con la IA:', err);
+        return res.status(500).json({ message: "Error al conectar con la IA", error: err.message });
+    }
 };
+
 
 
 const getAnalisisbyPaciente = async (req,res) => {
@@ -86,28 +137,14 @@ const getAllAnalisis = async (req,res)=> {
 
 }
 
-const updateResult = async (req,res) => {
-    const {resultado,DNI} = req.body;
-    try{
-    const result = await analisisService.updateResult(resultado,DNI);
-    if (result) {
-        console.log(resultado);
-        res.status(200).json({ message: 'Resultado actualizado correctamente' });
-    } else {
-        res.status(404).json({ error: 'Análisis no encontrado' });
-    }
-} catch (error) {
-    console.error('Error al actualizar el resultado:', error);
-    res.status(500).json({ error: 'Error al actualizar el resultado' });
-}
-};
+
 
 
 const Analisis = {
     manejarSubidaArchivo,
     SaveAnalisis,
     getAnalisisbyPaciente,
-    updateResult,
+   
     getAllAnalisis
    
 }
