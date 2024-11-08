@@ -60,7 +60,7 @@ const manejarSubidaArchivo = (req, res) => {
 
     try {
         const body = { url: imageUrl };
-        const response = await fetch("https://project-malaria.onrender.com/analyze_image", {
+        const response = await fetch("https://scama.onrender.com ", {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
