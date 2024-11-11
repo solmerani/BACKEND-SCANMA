@@ -80,9 +80,15 @@ const SaveAnalisis = async (req, res) => {
                     console.log('Archivo local eliminado correctamente');
                 }
             });
+            return res.status(200).json({
+                message: 'Imagen subida y análisis completado',
+                imageUrl: imageUrl,
+                iaResponse: data
+            });
         } else {
             console.error('Error en la respuesta de análisis:', data.message);
         }
+       
 
     } catch (error) {
         console.error('Error al procesar el análisis:', error);
