@@ -58,21 +58,37 @@ const SaveAnalisis = async (req, res) => {
             body: JSON.stringify(body)
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Respuesta de la IA:', data);
-
-            const prediccion = data.prediction;
-            const resultado = (prediccion === "Anomalía");
-
+        const data = await response.json();
+        console.log(data);
+        const prediccion = data.prediction;
+        res.status(200).json({
+            message: 'Imagen subida y análisis completado',
+            imageUrl: imageUrl,
+            resultadoIA: prediccion
+        });
+        
+        if (prediccion === "Anomalía") {
+            const resultado = true;
             try {
-                await analisisService.updateResult(resultado, paciente);
+                await analisisService.updateResult(resultado, paciente)
                 console.log('Resultado actualizado correctamente');
             } catch (error) {
                 console.error('Error al actualizar resultado:', error);
+                return res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
             }
+        } else if (prediccion === "Sano") {
+            const resultado = false;
+            try {
+                await analisisService.updateResult(resultado, paciente)
+                console.log('Resultado actualizado correctamente');
+            } catch (error) {
+                console.error('Error al actualizar resultado:', error);
+                return res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+            }
+        }
 
-            // Eliminar archivo local
+        if (response.ok) {
+            // Eliminar el archivo local después de subirlo y analizarlo
             fs.unlink(image, (err) => {
                 if (err) {
                     console.error('Error al eliminar el archivo local:', err);
@@ -80,26 +96,24 @@ const SaveAnalisis = async (req, res) => {
                     console.log('Archivo local eliminado correctamente');
                 }
             });
-            return res.status(200).json({
-                message: 'Imagen subida y análisis completado',
-                imageUrl: imageUrl,
-                resultadoIA: prediccion
-            });
-        } else {
-            console.error('Error en la respuesta de análisis:', data.message);
-        }
-       
 
-    } catch (error) {
-        console.error('Error al procesar el análisis:', error);
-        if (!res.headersSent) {
-            return res.status(500).json({ message: "Error al procesar el análisis", error: error.message });
+            return res.json({ message: "Análisis subido correctamente", imageUrl, prediccion });
+        } else {
+            console.log(data);
+            console.error('Error al subir análisis:' + data.message);
+            return res.status(500).json("Error al subir análisis");
         }
+
+    } catch (err) {
+        console.error('Error en la comunicación con IA:', err);
+        return res.status(500).json({
+            message: "Error en la comunicación con el servidor de IA",
+            error: err.message, 
+        });
     }
 };
- 
-
    
+
 
 
 
