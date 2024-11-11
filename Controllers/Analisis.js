@@ -44,12 +44,6 @@ const SaveAnalisis = async (req, res) => {
         // Guardar análisis en la base de datos
         await analisisService.SaveAnalisis(imageUrl, fecha, paciente, medicoDni, notas);
 
-        // Enviar respuesta inicial al cliente
-        res.status(200).json({
-            message: 'Imagen subida y URL guardada correctamente',
-            imageUrl: imageUrl
-        });
-
         // Realizar llamada a la IA
         const body = { url: imageUrl };
         const response = await fetch("https://scama.onrender.com/analyze_image/", {
@@ -61,58 +55,41 @@ const SaveAnalisis = async (req, res) => {
         const data = await response.json();
         console.log(data);
         const prediccion = data.prediction;
-        res.status(200).json({
-            message: 'Imagen subida y análisis completado',
-            imageUrl: imageUrl,
-            resultadoIA: prediccion
+
+        // Actualizar resultado en la base de datos según la predicción
+        const resultado = (prediccion === "Anomalía") ? true : (prediccion === "Normal") ? false : null;
+
+        if (resultado !== null) {
+            try {
+                await analisisService.updateResult(resultado, paciente);
+                console.log('Resultado actualizado correctamente');
+            } catch (error) {
+                console.error('Error al actualizar resultado:', error);
+                return res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
+            }
+        }
+
+        // Eliminar el archivo local después de procesar el análisis
+        fs.unlink(image, (err) => {
+            if (err) {
+                console.error('Error al eliminar el archivo local:', err);
+            } else {
+                console.log('Archivo local eliminado correctamente');
+            }
         });
-        
-        if (prediccion === "Anomalía") {
-            const resultado = true;
-            try {
-                await analisisService.updateResult(resultado, paciente)
-                console.log('Resultado actualizado correctamente');
-            } catch (error) {
-                console.error('Error al actualizar resultado:', error);
-                return res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
-            }
-        } else if (prediccion === "Sano") {
-            const resultado = false;
-            try {
-                await analisisService.updateResult(resultado, paciente)
-                console.log('Resultado actualizado correctamente');
-            } catch (error) {
-                console.error('Error al actualizar resultado:', error);
-                return res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
-            }
-        }
 
-        if (response.ok) {
-            // Eliminar el archivo local después de subirlo y analizarlo
-            fs.unlink(image, (err) => {
-                if (err) {
-                    console.error('Error al eliminar el archivo local:', err);
-                } else {
-                    console.log('Archivo local eliminado correctamente');
-                }
-            });
-
-            return res.json({ message: "Análisis subido correctamente", imageUrl, prediccion });
-        } else {
-            console.log(data);
-            console.error('Error al subir análisis:' + data.message);
-            return res.status(500).json("Error al subir análisis");
-        }
+        // Enviar una única respuesta al cliente al final del proceso
+        return res.status(200).json({ message: "Análisis subido correctamente", imageUrl, prediccion });
 
     } catch (err) {
         console.error('Error en la comunicación con IA:', err);
         return res.status(500).json({
             message: "Error en la comunicación con el servidor de IA",
-            error: err.message, 
+            error: err.message,
         });
     }
 };
-   
+
 
 
 
