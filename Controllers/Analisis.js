@@ -2,6 +2,7 @@ import cloudinary from "../middleweras/upload.js";
 import analisisService from "../services/analisisService.js";
 import fs from 'fs';
 import upload from '../middleweras/multer.js';
+import fetch from 'node-fetch';
 
 //extensiones de archivos
 
@@ -19,78 +20,59 @@ const manejarSubidaArchivo = (req, res) => {
 
 
 //subir imagenes a cloudinary
-    const SaveAnalisis = async (req, res) => {
-        const image = req.file.path;
-        const { paciente,notas } = req.body;
-        const medicoDni = req.userDNI;
-        const fecha = Date.now()
-        // Validación para campos requeridos
-    if (!image ) {
-        return res.status(400).json({
-            message: ' Es necesario subir una imagen.'
-        });
+const SaveAnalisis = async (req, res) => {
+    const image = req.file.path;
+    const { paciente, notas } = req.body;
+    const medicoDni = req.userDNI;
+    const fecha = Date.now();
+
+    // Validación para campos requeridos
+    if (!image) {
+        return res.status(400).json({ message: 'Es necesario subir una imagen.' });
     }
     if (!paciente) {
-        return res.status(400).json({
-            message: ' Estos campos son requeridos'
-        });
+        return res.status(400).json({ message: 'Estos campos son requeridos' });
     }
 
-        try {
-            const uploadImage = await cloudinary.uploader.upload(image, {
-                folder: 'analisis',
-            });
-   
-            const imageUrl = uploadImage.secure_url;
-    
-            console.log(imageUrl);
-            await analisisService.SaveAnalisis(imageUrl, fecha, paciente,medicoDni,notas);
-            res.status(200).json({
-                message: 'Imagen subida y URL guardada correctamente',
-                imageUrl: imageUrl
-            });
-           
-        }catch (error){
-         console.log(error);
-            console.error('Error al subir imagen:', error);
-            res.status(500).json({  message: 'Internal Server Error', error: error.message  });
-        }
-       
-    //conexion con ia 
-
     try {
+        // Subir imagen a Cloudinary
+        const uploadImage = await cloudinary.uploader.upload(image, { folder: 'analisis' });
+        const imageUrl = uploadImage.secure_url;
+
+        console.log('Imagen subida a Cloudinary:', imageUrl);
+
+        // Guardar análisis en la base de datos
+        await analisisService.SaveAnalisis(imageUrl, fecha, paciente, medicoDni, notas);
+
+        // Enviar respuesta inicial al cliente
+        res.status(200).json({
+            message: 'Imagen subida y URL guardada correctamente',
+            imageUrl: imageUrl
+        });
+
+        // Realizar llamada a la IA
         const body = { url: imageUrl };
-        const response = await fetch("https://scama.onrender.com ", {
+        const response = await fetch("https://scama.onrender.com/analyze_image/", {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
         });
-        const data = await response.json();
-        console.log(data);
-        const prediccion = data.prediction;
-        if (prediccion === "Infectado") {
-            const resultado = true;
-            try {
-                await analisisService.updateResult(resultado,paciente);
-                console.log('Resultado actualizado correctamente');
-            } catch (error) {
-                console.error('Error al actualizar resultado:', error);
-                res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
-            }
-        }
-        else if (prediccion === "Sano") {
-            const resultado = false;
-            try {
-                await analisisService.updateResult(resultado,paciente);
-                console.log('Resultado actualizado correctamente');
-            } catch (error) {
-                console.error('Error al actualizar resultado:', error);
-                res.status(500).json({ message: "Error al actualizar resultado", error: error.message });
-            }
-        }
-        
+
         if (response.ok) {
-            // Eliminar el archivo local después de subirlo y analizarlo
+            const data = await response.json();
+            console.log('Respuesta de la IA:', data);
+
+            const prediccion = data.prediction;
+            const resultado = (prediccion === "Anomalía");
+
+            try {
+                await analisisService.updateResult(resultado, paciente);
+                console.log('Resultado actualizado correctamente');
+            } catch (error) {
+                console.error('Error al actualizar resultado:', error);
+            }
+
+            // Eliminar archivo local
             fs.unlink(image, (err) => {
                 if (err) {
                     console.error('Error al eliminar el archivo local:', err);
@@ -98,17 +80,20 @@ const manejarSubidaArchivo = (req, res) => {
                     console.log('Archivo local eliminado correctamente');
                 }
             });
-
-            return res.json({ message: "Análisis subido correctamente", imageUrl });
         } else {
             console.error('Error en la respuesta de análisis:', data.message);
-            return res.status(500).json({ message: "Error al subir análisis" });
         }
-    } catch (err) {
-        console.error('Error al conectar con la IA:', err);
-        return res.status(500).json({ message: "Error al conectar con la IA", error: err.message });
+
+    } catch (error) {
+        console.error('Error al procesar el análisis:', error);
+        if (!res.headersSent) {
+            return res.status(500).json({ message: "Error al procesar el análisis", error: error.message });
+        }
     }
 };
+ 
+
+   
 
 
 
@@ -144,7 +129,6 @@ const Analisis = {
     manejarSubidaArchivo,
     SaveAnalisis,
     getAnalisisbyPaciente,
-   
     getAllAnalisis
    
 }
