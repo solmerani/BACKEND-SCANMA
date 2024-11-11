@@ -8,6 +8,7 @@ router.post("/register", medicos.createMedico);
 router.post("/login", medicos.loginMedico);
 router.get("/:DNI", medicos.verPerfilMedico);
 router.get("/", medicos.verMedicos);
+router.put('/reset-password', medicos.SolicitarRecuperacion);
 router.put("/newpassword", medicos.cambiarContraseña);
 router.delete("/:DNI", medicos.deleteMedico);
 

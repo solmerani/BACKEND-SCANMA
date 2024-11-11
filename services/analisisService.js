@@ -28,9 +28,9 @@ return result.rows;
 };
 
 
-const updateResult = async (resultado,DNI)  => {
+const updateResult = async (resultado,paciente)  => {
 const result = await pool.query(
-    'UPDATE public."Analisis" SET "Resultado" = $1 WHERE "Paciente" = $2 ',[resultado,DNI],
+    'UPDATE public."Analisis" SET "Resultado" = $1 WHERE "Paciente" = $2 ',[resultado,paciente],
 );
 return result.rows;
 
