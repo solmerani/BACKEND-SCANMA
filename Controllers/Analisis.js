@@ -83,7 +83,7 @@ const SaveAnalisis = async (req, res) => {
             return res.status(200).json({
                 message: 'Imagen subida y análisis completado',
                 imageUrl: imageUrl,
-                iaResponse: data
+                resultadoIA: prediccion
             });
         } else {
             console.error('Error en la respuesta de análisis:', data.message);
